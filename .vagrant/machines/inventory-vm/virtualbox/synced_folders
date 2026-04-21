@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/inventory-app":{"guestpath":"/home/vagrant/inventory-app","hostpath":"/home/bbenskou/Desktop/crud-master/srcs/inventory-app","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/bbenskou/Desktop/crud-master","disabled":false,"__vagrantfile":true}}}
