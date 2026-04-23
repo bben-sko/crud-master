@@ -1,23 +1,33 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
 
-#install nodejs and npm
-curl -fsSL https://deb.nodesource.com/setup_20.x | bash
-sudo apt-get install -y nodejs
-sudo npm install -g npm@latest
-sudo npm install -g pm2
+APP_DIR="${GATEWAY_APP_DIR:-/home/vagrant/api-gateway-app}"
+APP_NAME="api-gateway"
 
-#setup python venv and install dependencies
-# ─── Setup Python venv ────────────────────────────────────────────
-echo "[3/4] Setting up Python environment..."
-cd /vagrant/srcs/api-gateway-app
+cd "$APP_DIR"
+
 python3 -m venv venv
-venv/bin/pip install --upgrade pip
-venv/bin/pip install -r requirements.txt
+"$APP_DIR/venv/bin/pip" install --upgrade pip
+"$APP_DIR/venv/bin/pip" install -r requirements.txt
 
-# ─── Start app with PM2 ───────────────────────────────────────────
-echo "[4/4] Starting API Gateway with PM2..."
-pm2 start /vagrant/srcs/api-gateway-app/server.py \
-    --interpreter /vagrant/srcs/api-gateway-app/venv/bin/python3 \
-    --name api-gateway \
-    --cwd /vagrant/srcs/api-gateway-app
-pm2 save
+cat > "$APP_DIR/.env" <<EOF
+GATEWAY_HOST=${GATEWAY_HOST}
+GATEWAY_PORT=${GATEWAY_PORT}
+INVENTORY_API_URL=http://${INVENTORY_VM_IP}:${INVENTORY_PORT}
+INVENTORY_TIMEOUT=10
+RABBITMQ_HOST=${BILLING_VM_IP}
+RABBITMQ_PORT=${RABBITMQ_PORT}
+RABBITMQ_USER=${RABBITMQ_USER}
+RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+RABBITMQ_QUEUE=${RABBITMQ_QUEUE}
+EOF
+
+if sudo pm2 describe "$APP_NAME" >/dev/null 2>&1; then
+  sudo pm2 delete "$APP_NAME"
+fi
+
+sudo pm2 start "$APP_DIR/server.py" \
+  --name "$APP_NAME" \
+  --cwd "$APP_DIR" \
+  --interpreter "$APP_DIR/venv/bin/python"
+sudo pm2 save

@@ -1,7 +1,12 @@
+import os
+
 from app import create_app
+
 
 app = create_app()
 
+
 if __name__ == "__main__":
-    app.run(host="localhost", port=5001)
-    
+    host = os.getenv("INVENTORY_HOST", "0.0.0.0")
+    port = int(os.getenv("INVENTORY_PORT", "8080"))
+    app.run(host=host, port=port)

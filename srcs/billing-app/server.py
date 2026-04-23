@@ -1,4 +1,5 @@
-from app import create_consumer
+from app import run_consumer
+
 
 if __name__ == "__main__":
-    create_consumer()
+    run_consumer()

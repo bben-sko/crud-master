@@ -1,4 +1,4 @@
-from .consumer import start_consumer
+from .consumer import run_consumer
 
-def start_billing_app():
-    start_consumer()
+
+__all__ = ["run_consumer"]
