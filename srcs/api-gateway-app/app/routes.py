@@ -58,9 +58,6 @@ def proxy_inventory_request(path):
     )
 
 
-@api_gateway_bp.get("/health")
-def health_check():
-    return jsonify({"status": "ok", "service": "api-gateway"}), 200
 
 
 @api_gateway_bp.route("/api/movies", methods=["GET", "POST", "DELETE"])

@@ -22,9 +22,6 @@ def validate_movie_payload(payload):
     return None
 
 
-@inventory_bp.get("/health")
-def health_check():
-    return jsonify({"status": "ok", "service": "inventory-api"}), 200
 
 
 @inventory_bp.route("/api/movies", methods=["GET", "POST", "DELETE"])
