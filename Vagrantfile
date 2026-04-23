@@ -29,8 +29,8 @@ Vagrant.configure("2") do |config|
 
 config.vm.define "gateway-vm" do |aga|
   aga.vm.hostname = "gateway-vm"
-  aga.vm.network "private_network", ip: "192.168.56.10", virtualbox__intnet: true
-   aga.vm.network "forwarded_port", guest: 5000, host: 5001
+  aga.vm.network "private_network", ip: "192.168.56.10"
+   aga.vm.network "forwarded_port", guest: 3000, host: 3000
   aga.vm.synced_folder "./srcs/api-gateway-app" , "/home/vagrant/api-gateway-app"
      aga.vm.provider "virtualbox" do |vb|
       vb.memory = "2048"
@@ -42,7 +42,7 @@ aga.vm.provision "shell", path: "./scripts/gateway.sh"
 end
 config.vm.define "inventory-vm" do |ia|
     ia.vm.hostname = "inventory-vm"
-    ia.vm.network "private_network", ip: "192.168.56.11", virtualbox__intnet: true
+    ia.vm.network "private_network", ip: "192.168.56.11"
     ia.vm.network "forwarded_port", guest: 5000, host: 5002
 
     ia.vm.synced_folder "./srcs/inventory-app" , "/home/vagrant/inventory-app"
@@ -55,7 +55,7 @@ ia.vm.provision "shell", path: "./scripts/inventory.sh"
 end
 config.vm.define "billing-vm" do |ba|
   ba.vm.hostname = "billing-vm"
-  ba.vm.network "private_network", ip: "192.168.56.12", virtualbox__intnet: true
+  ba.vm.network "private_network", ip: "192.168.56.12"
    ba.vm.network "forwarded_port", guest: 5000, host: 5003
   ba.vm.synced_folder "./srcs/billing-app" , "/home/vagrant/billing-app"
    ba.vm.provider "virtualbox" do |vb|
